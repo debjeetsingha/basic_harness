@@ -14,6 +14,7 @@ Do not invent project structure, APIs, or behavior.
 Use available tools responsibly and stop once the user's objective has been achieved.
 """
 
+
 def get_coding_agent_instruction():
     return """
 When working on a software project:

@@ -1,24 +1,33 @@
 def get_bash_toolset_instruction():
     prompt = """
-Execute shell commands inside the project workspace.
+Use this tool whenever you need to execute shell commands.
 
-The current working directory persists between calls.
+The working directory persists across invocations.
 
-Use this tool to:
-- inspect files
-- navigate directories
-- run Python
-- run git
-- execute tests
-- run build tools
+When changing directories:
 
-Do not attempt to leave the workspace.
+- Execute `cd` by itself.
+- Wait for it to succeed.
+- Execute the next command afterward.
 
-Do not use destructive commands.
+Good:
 
-Prefer reading project files before modifying them.
+bash("cd src")
+bash("pytest")
 
-Run one logical command per invocation.
+Good:
+
+bash("cd tests")
+bash("python test_api.py")
+
+Avoid:
+
+bash("cd src && pytest")
+
+Avoid:
+
+bash("cd src; python main.py")
+
+The workspace is isolated inside a disposable Docker container. You may freely create, modify, or delete files within the workspace. None of these changes affect the user's original project until they are explicitly reviewed and applied.
 """
     return prompt
- 

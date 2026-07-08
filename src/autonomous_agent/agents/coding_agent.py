@@ -1,7 +1,10 @@
 from pydantic_ai import Agent
 
-from src.autonomous_agent.config.models import gemma4_ollama_cloud
-from src.autonomous_agent.prompts.agent_prompt.coding_agent_prompt import get_coding_agent_system_prompt, get_coding_agent_instruction
+from src.autonomous_agent.config.models import gemma4_ollama_cloud, gemma4_e2b_local
+from src.autonomous_agent.prompts.agent_prompt.coding_agent_prompt import (
+    get_coding_agent_system_prompt,
+    get_coding_agent_instruction,
+)
 from src.autonomous_agent.tools.bash_tool import bash_toolset
 from src.autonomous_agent.config.model_settings import openai_chat_high_settings
 
