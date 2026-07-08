@@ -13,4 +13,5 @@ dependencies = [
 [dependency-groups]
 dev = [
     "pydantic-ai-slim[web]>=2.6.0",
+    "pydantic-monty>=0.0.18",
 ]
