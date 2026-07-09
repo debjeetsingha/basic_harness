@@ -17,12 +17,22 @@ with DockerExecutor(os.getenv("WORKING_DIR_FOR_AGENT")) as executor:
     deps = CodingAgentDeps(
         executor=executor,
     )
-    result = coding_agent.run_sync(
-        user_prompt="list all the files in the project and delete them except .git",
-        deps=deps,
-    )
+    
+    while True:
+        input_prompt = input("Type exit to exit\n Input:  ")
+        if input_prompt=="exit":
+            # executor.cleanup()         
+            print("---git diff---")
+            print(executor.diff())
+            break
 
-    print(result.output)
+        result = coding_agent.run_sync(
+            user_prompt=input_prompt,
+            deps=deps,
+        )
+        print(result.output)
+
+
 
     # print("----steps----")
 
