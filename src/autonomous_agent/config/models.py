@@ -1,4 +1,5 @@
 from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.embeddings.openai import OpenAIEmbeddingModel
 from .providers import litellm_provider
 
 
@@ -18,3 +19,8 @@ ai_studio_gemma26b = OpenAIChatModel(
     "gemini/gemma-4-26b-a4b-it", provider=litellm_provider
 )
 ai_studio_gemma31b = OpenAIChatModel("gemma-4-31b-it", provider=litellm_provider)
+
+
+gemini_embedding_1 = OpenAIEmbeddingModel("gemini/gemini-embedding-001", 
+                                          provider=litellm_provider, 
+                                          )
