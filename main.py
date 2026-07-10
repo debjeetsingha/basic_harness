@@ -5,7 +5,7 @@ from src.autonomous_agent.config.settings import load_dotenv
 from src.autonomous_agent.config.telemetry import start_tracing
 from src.autonomous_agent.agents.coding_agent import coding_agent
 from src.autonomous_agent.config.models import gemma4_ollama_cloud, gptoss_ollama_cloud
-from src.autonomous_agent.services.docker_executer import DockerExecutor
+from src.services.docker_executer import DockerExecutor
 from src.autonomous_agent.data_model.coding_agent_model import CodingAgentDeps
 
 load_dotenv()

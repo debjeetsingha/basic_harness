@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.autonomous_agent.services.docker_executer import DockerExecutor
+from src.services.docker_executer import DockerExecutor
 
 
 @dataclass

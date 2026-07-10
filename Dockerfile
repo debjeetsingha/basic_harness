@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     npm \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip install uv
+RUN pip install uv pandas numpy scikit-learn duckdb matplotlib seaborn cartopy 
 
 
 WORKDIR /workspace
