@@ -33,7 +33,15 @@ def bash(ctx: RunContext[CodingAgentDeps], command: str) -> dict:
     Changes affect only the temporary Docker workspace until they are
     explicitly accepted and applied to the user's project.
     """
-    return ctx.deps.executor.execute(command)
+    try:
+        return ctx.deps.executor.execute(command)
+    except Exception as e:
+        return {
+            "success": False,
+            "stdout": "",
+            "stderr": f"Tool execution error: {e}",
+            "exit_code": 1,
+        }
 
 
 bash_toolset = FunctionToolset(

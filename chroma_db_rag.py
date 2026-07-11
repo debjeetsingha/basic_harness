@@ -1,9 +1,9 @@
 import asyncio
 
 from pydantic_ai import Embedder
-from src.autonomous_agent.config.models import gemini_embedding_1
+from src.config.models import embeddinggemma_local
 
-embedder = Embedder(gemini_embedding_1)
+embedder = Embedder(embeddinggemma_local)
 
 async def main():
     # Embed a search query

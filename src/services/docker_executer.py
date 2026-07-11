@@ -37,6 +37,7 @@ class DockerExecutor:
         self,
         project: str | Path,
         image: str = "ai-agent",
+        output_dir: str | Path | None = None,
     ):
         self.project = Path(project).resolve()
 
@@ -52,6 +53,12 @@ class DockerExecutor:
         self.temp_dir: Path | None = None
 
         self.cwd = "/workspace/project"
+
+        self.output_dir: Path | None = (
+            Path(output_dir).resolve() if output_dir else None
+        )
+
+        self.initial_commit: str | None = None
 
     def start(self):
 
@@ -103,6 +110,9 @@ class DockerExecutor:
                 raise RuntimeError(
                     f"Failed to initialize git.\nCommand: {command}\n{result['stderr']}"
                 )
+
+        result = self.execute("git rev-parse HEAD")
+        self.initial_commit = result["stdout"].strip()
 
     def execute(self, command: str) -> dict:
         """
@@ -176,11 +186,71 @@ class DockerExecutor:
     def diff(self) -> str:
 
         result = self.container.exec_run(
-            "git diff --binary HEAD",
+            f"git diff --binary {self.initial_commit}",
             workdir="/workspace/project",
         )
 
         return result.output.decode()
+
+    def apply_changes(self) -> str:
+        """
+        Copy modified files from the container back to the original project directory.
+
+        Returns
+        -------
+        str
+            The path of the original project that was updated.
+        """
+        result = subprocess.run(
+            [
+                "docker",
+                "cp",
+                f"{self.container.id}:/workspace/project/.",
+                str(self.project),
+            ],
+            capture_output=True,
+        )
+
+        if result.returncode != 0:
+            stderr = result.stderr.decode().strip()
+            raise RuntimeError(f"Failed to apply changes: {stderr}")
+
+        return str(self.project)
+
+    def export_output(self, container_path: str = "/workspace/project") -> str | None:
+        """
+        Copy files from the container to the local output directory.
+
+        Parameters
+        ----------
+        container_path : str
+            Path inside the container to copy from (default: /workspace/project).
+
+        Returns
+        -------
+        str | None
+            The local path where files were copied, or None if no output_dir is set.
+        """
+        if self.output_dir is None:
+            return None
+
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        result = subprocess.run(
+            [
+                "docker",
+                "cp",
+                f"{self.container.id}:{container_path}/.",
+                str(self.output_dir),
+            ],
+            capture_output=True,
+        )
+
+        if result.returncode != 0:
+            stderr = result.stderr.decode().strip()
+            raise RuntimeError(f"Failed to export output: {stderr}")
+
+        return str(self.output_dir)
 
     def cleanup(self):
 
