@@ -14,7 +14,7 @@ from src.autonomous_agent.data_model.rag_agent_model import RagAgentDeps
 from src.autonomous_agent.data_model.orchestrator_model import OrchestratorDeps
 
 load_dotenv()
-# start_tracing()
+start_tracing()
 
 SUMMARIZE_PROMPT = (
     "Summarize the key points of our conversation in a concise paragraph. "
